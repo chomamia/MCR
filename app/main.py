@@ -1,0 +1,26 @@
+import streamlit as st
+from page_views import answer, assignment, answer_detail, assignment_detail
+from components.sidebar import render_sidebar
+
+st.set_page_config(page_title="Management App", layout="wide")
+
+params = dict(st.query_params)
+file_name = params.get("file")
+page_param = params.get("page")
+id = params.get("id")
+
+if "current_page" not in st.session_state:
+    st.session_state["current_page"] = "Answer"
+
+if page_param == "answer_detail" and file_name:
+    answer_detail.show(file_name)
+elif page_param == "assignment_detail":
+    assignment_detail.show(id)
+else:
+    selected_page = render_sidebar()
+    st.session_state["current_page"] = selected_page
+
+    if selected_page == "Answer":
+        answer.show()
+    elif selected_page == "Assignment":
+        assignment.show()
