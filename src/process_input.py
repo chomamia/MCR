@@ -65,6 +65,7 @@ def process_input(
             try:
                 corners = corner_finding.find_corner_marks(prepared_image,
                                                        save_path=debug_path)
+                # print("corners:", corners[0].x, corners[0].y)
             except corner_finding.CornerFindingError:
                 rejected_files.add({grid_i.Field.IMAGE_FILE: image_path.name}, [])
                 continue
@@ -88,17 +89,24 @@ def process_input(
                                                 grid).get_all_fill_percents()
                 for key, value in form_variant.fields.items() if value is not None
             }
+            # for key, value in form_variant.fields.items():
+            #     print("key:", key)
+            #     for i in range(len(grid_r.get_group_from_info(value,grid).get_all_fill_percents())):
+            #         result = grid_r.get_group_from_info(value,grid).get_all_fill_percents()[i]
+            #         fill_max = max(result)
+            #         max_index = result.index(fill_max)
+            #         print("max_index:", max_index + 1)
+                    # print("fill_percents:", grid_r.get_group_from_info(value,grid).get_all_fill_percents()[i])
             answer_fill_percents = [
                 grid_r.get_group_from_info(question, grid).get_all_fill_percents()
                 for question in form_variant.questions
             ]
-
+            # print("answer_fill_percents:", len(answer_fill_percents)) 
             # Calculate the fill threshold
             threshold = grid_r.calculate_bubble_fill_threshold(
                 field_fill_percents,
                 answer_fill_percents,
-                save_path=debug_path,
-                form_variant=form_variant)
+                save_path=debug_path)
 
             # Get the answers for questions
             answers = [
@@ -111,7 +119,6 @@ def process_input(
             field_data: tp.Dict[grid_i.RealOrVirtualField, str] = {
                 grid_i.Field.IMAGE_FILE: image_path.name,
             }
-            print("field_data:", answers)
             # Read the Student ID. If it indicates this exam is a key, treat it as such
             student_id = grid_r.read_field_as_string(
                 grid_i.Field.STUDENT_ID, grid, threshold, form_variant,

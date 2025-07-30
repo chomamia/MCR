@@ -365,7 +365,7 @@ def read_field_as_string(field: grid_info.Field, grid: Grid, threshold: float,
         return None
 
 
-def read_answer_as_string(question: int, grid: Grid, multi_answers_as_f: bool,
+def read_answer_as_string(question: int, grid: Grid,
                           threshold: float,
                           form_variant: grid_info.FormVariant,
                           fill_percents: tp.List[tp.List[float]]) -> str:
@@ -373,10 +373,7 @@ def read_answer_as_string(question: int, grid: Grid, multi_answers_as_f: bool,
     just the question number and the grid object. """
     answer = field_group_to_string(
         read_answer(question, grid, threshold, form_variant, fill_percents))
-    if not multi_answers_as_f or "|" not in answer:
-        return answer
-    else:
-        return "F"
+    return answer
 
 
 def calculate_bubble_fill_threshold(
