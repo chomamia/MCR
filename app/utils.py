@@ -46,3 +46,25 @@ def convert_list_assignment(df: pd.DataFrame):
 
     df = df.rename(columns={k: v for k, v in column_mapping.items() if k in df.columns})
     return df
+
+
+def process_anskeys(uploaded_file) -> Tuple[str, str, List[List[str]]]:
+    df = pd.read_excel(uploaded_file)
+    course_id = ""
+    test_form_code = ""
+    questions = []
+    if "Key" in df.columns and "Value" in df.columns:
+        for _, row in df.iterrows():
+            key = str(row["Key"]).strip()
+            value = str(row["Value"]).strip()
+
+            if key.lower().startswith("course"):
+                course_id = value if value != "nan" else ""
+            elif key.lower().startswith("test"):
+                test_form_code = value if value != "nan" else ""
+            elif key.lower().startswith("q"):
+                questions.append([key, value])
+    else:
+        raise ValueError("File must contain 'Key' and 'Value' columns.")
+
+    return course_id, test_form_code, questions

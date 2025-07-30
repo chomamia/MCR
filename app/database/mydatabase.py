@@ -30,6 +30,17 @@ def create_table():
             assignment_list TEXT
         )
     """)
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS answers (
+            id TEXT PRIMARY KEY,
+            course_id TEXT,
+            test_form_code TEXT,
+            answer_list TEXT, 
+            create_date TEXT,
+            update_date TEXT
+        )
+    """)
     conn.commit()
     conn.close()
 
@@ -57,6 +68,25 @@ def insert_assignment(data: List[List[str]]):
         test_form_code, student_id, course_id,
         score, now, now,
         source_file, assignment_json
+    ))
+    conn.commit()
+    conn.close()
+
+def insert_answer(course_id:str, test_form_code:str, answer_list:List[List[str]]):
+    """
+    answer_list: Python list (we'll JSON-serialize)
+    """
+    conn = create_connection()
+    answer_id = str(uuid.uuid4())
+    answer_json = json.dumps(answer_list, ensure_ascii=False)
+    cursor = conn.cursor()
+    now = datetime.utcnow().isoformat()
+    cursor.execute("""
+        INSERT INTO answers (
+            id, course_id, test_form_code, answer_list, create_date, update_date
+        ) VALUES (?, ?, ?, ?, ?, ?)
+    """, (
+        answer_id, course_id, test_form_code, answer_json, now, now
     ))
     conn.commit()
     conn.close()

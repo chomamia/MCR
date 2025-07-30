@@ -1,6 +1,7 @@
 import streamlit as st
 from mcr.process_input import process_input
 from database.mydatabase import *
+from utils import process_anskeys
 
 def render_upload_answer_section(name_file: str):
     """
@@ -21,11 +22,12 @@ def render_upload_answer_section(name_file: str):
     """
     st.markdown("#### Upload or Drop {} file".format(name_file))
     uploaded_files = st.file_uploader(
-        "Upload file Answer", type="csv", accept_multiple_files=True, label_visibility="collapsed"
+        "Upload file Answer", type="xlsx", accept_multiple_files=True, label_visibility="collapsed"
     )
     if uploaded_files:
         for file in uploaded_files:
-            st.success(f"Uploaded: {file.name}")
+            course_id, test_form_code, questions = process_anskeys(file)
+            insert_answer(course_id, test_form_code, questions)
     st.button("Delete", key="delete")
 
 def render_upload_assignment_section(name_file: str):

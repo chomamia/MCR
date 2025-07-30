@@ -21,7 +21,8 @@ if "current_page" not in st.session_state:
 if page_param == "answer_detail" and file_name:
     answer_detail.show(file_name)
 elif page_param == "assignment_detail":
-    assignment_detail.show(id)
+    if id is not None:
+        assignment_detail.show(id)
 else:
     selected_page = render_sidebar()
     st.session_state["current_page"] = selected_page
