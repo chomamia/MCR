@@ -1,12 +1,13 @@
 import streamlit as st
+import pandas as pd 
 from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode
 
-def render_table_section(df):
+def render_table_section(df: pd.DataFrame):
     selected_rows = st.multiselect("Select rows to delete:", df.index, label_visibility="collapsed")
     st.dataframe(df, use_container_width=True, height=800)
     return selected_rows
 
-def render_table_section_answer(df):
+def render_table_section_answer(df:  pd.DataFrame):
     gb = GridOptionsBuilder.from_dataframe(df)
     gb.configure_pagination(paginationAutoPageSize=True)
     gb.configure_selection("single")
@@ -15,7 +16,7 @@ def render_table_section_answer(df):
         "textDecoration": "underline",
         "cursor": "pointer"
     }
-    gb.configure_columns(["ID", "Name File"], cellStyle=clickable_style)
+    gb.configure_columns(["ID"], cellStyle=clickable_style)
     grid_options = gb.build()
     grid_response = AgGrid(
         df,
@@ -35,7 +36,7 @@ def render_table_section_answer(df):
         st.rerun()
 
 
-def render_table_section_assignment(df):
+def render_table_section_assignment(df: pd.DataFrame):
     gb = GridOptionsBuilder.from_dataframe(df)
     gb.configure_pagination(paginationAutoPageSize=True)
     gb.configure_selection("single")

@@ -136,6 +136,7 @@ def get_all_assignments() -> pd.DataFrame:
             middle_name,
             student_id,
             course_id,
+            test_form_code,
             score,
             create_date,
             update_date FROM assignments''')
@@ -147,15 +148,15 @@ def get_all_assignments() -> pd.DataFrame:
     for row in rows:
         row = list(row)
         if len(row) > 10:
-            row[8] = format_datetime(row[9])  # create_date
-            row[9] = format_datetime(row[10])  # update_date
+            row[8] = format_datetime(row[8])  # create_date
+            row[9] = format_datetime(row[9])  # update_date
         data.append(row)
 
     df = pd.DataFrame(data, columns=columns)
     df = convert_list_assignment(df)
     return df
 
-def get_assignments_by_id(answer_id:str) -> pd.DataFrame:
+def get_answer_by_id(answer_id:str) -> pd.DataFrame:
     conn = sqlite3.connect("mydata.db")
     cursor = conn.cursor()
     cursor.execute('''SELECT 

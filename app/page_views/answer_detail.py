@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 from components.table_section import render_table_section
-from database.mydatabase import get_assignments_by_id
+from database.mydatabase import get_answer_by_id
 def create_answer_detail_data():
     """
     Create a sample DataFrame containing a list of questions and answers.
@@ -46,5 +46,5 @@ def show(id: str):
         st.query_params["page"] = "Answer"
         st.rerun()
 
-    df = get_assignments_by_id(id)
+    df = get_answer_by_id(id)
     render_table_section(df)

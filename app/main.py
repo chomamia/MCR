@@ -6,7 +6,6 @@ from page_views import answer, assignment, answer_detail, assignment_detail
 from components.sidebar import render_sidebar
 from database.mydatabase import create_table
 
-
 create_table()
 st.set_page_config(page_title="Management App", layout="wide")
 
