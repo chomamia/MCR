@@ -47,6 +47,19 @@ def convert_list_assignment(df: pd.DataFrame):
     df = df.rename(columns={k: v for k, v in column_mapping.items() if k in df.columns})
     return df
 
+def convert_list_answer(df: pd.DataFrame):
+    column_mapping = {
+        "id": "ID",
+        "name_file": "File Name",
+        "course_id": "Course ID",
+        "answer_list": "Number Of Answers",
+        "test_form_code": "Test Form Code",
+        "create_date": "Create Date",
+        "update_date": "Create Upload"
+    }
+
+    df = df.rename(columns={k: v for k, v in column_mapping.items() if k in df.columns})
+    return df
 
 def process_anskeys(uploaded_file) -> Tuple[str, str, List[List[str]]]:
     df = pd.read_excel(uploaded_file)

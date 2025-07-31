@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 from components.table_section import render_table_section
-
+from database.mydatabase import get_assignments_by_id
 def create_answer_detail_data():
     """
     Create a sample DataFrame containing a list of questions and answers.
@@ -23,7 +23,7 @@ def create_answer_detail_data():
         "Create Upload": "01-04-2024 09:00:00.000"
     } for i in range(1, 30)])
 
-def show(file_name: str):
+def show(id: str):
     """
     Display a detailed view of a given file using Streamlit.
 
@@ -39,13 +39,12 @@ def show(file_name: str):
     Note:
         This function depends on Streamlit's session state and UI components.
     """
-    st.markdown(f"### 📄 Detail View for `{file_name}`")
+    st.markdown(f"### 📄 Answer > `{id}`")
     st.markdown("---")
-    
     if st.button("🔙 Back"):
         st.query_params.clear()
         st.query_params["page"] = "Answer"
         st.rerun()
 
-    df = create_answer_detail_data()
+    df = get_assignments_by_id(id)
     render_table_section(df)

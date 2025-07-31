@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from components.upload_section import render_upload_answer_section
 from components.table_section import render_table_section_answer
-
+from database.mydatabase import get_all_answers
 def create_answer_data():
     """
     Create a sample DataFrame representing answer file metadata.
@@ -43,6 +43,6 @@ def show():
 
     render_upload_answer_section("Answer")
 
-    df = create_answer_data()
+    df = get_all_answers()
     render_table_section_answer(df)
     

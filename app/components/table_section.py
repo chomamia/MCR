@@ -29,9 +29,9 @@ def render_table_section_answer(df):
 
     selected = grid_response["selected_rows"]
     if selected is not None and len(selected) > 0:
-        file = selected.iloc[0]["Name File"]
+        id = selected.iloc[0]["ID"]
         st.query_params["page"] = "answer_detail"
-        st.query_params["file"] = file
+        st.query_params["id"] = id
         st.rerun()
 
 

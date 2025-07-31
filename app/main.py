@@ -18,8 +18,9 @@ id = params.get("id")
 if "current_page" not in st.session_state:
     st.session_state["current_page"] = "Answer"
 
-if page_param == "answer_detail" and file_name:
-    answer_detail.show(file_name)
+if page_param == "answer_detail":
+    if id is not None:
+        answer_detail.show(id)
 elif page_param == "assignment_detail":
     if id is not None:
         assignment_detail.show(id)

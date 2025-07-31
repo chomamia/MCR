@@ -27,7 +27,7 @@ def render_upload_answer_section(name_file: str):
     if uploaded_files:
         for file in uploaded_files:
             course_id, test_form_code, questions = process_anskeys(file)
-            insert_answer(course_id, test_form_code, questions)
+            insert_answer(file.name, course_id, test_form_code, questions)
     st.button("Delete", key="delete")
 
 def render_upload_assignment_section(name_file: str):

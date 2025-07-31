@@ -1,7 +1,7 @@
 import sqlite3
 import json
 from typing import List
-from utils import convert_insert_assignment, convert_list_assignment
+from utils import convert_insert_assignment, convert_list_assignment, convert_list_answer
 import uuid
 import pandas as pd
 from datetime import datetime
@@ -34,6 +34,7 @@ def create_table():
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS answers (
             id TEXT PRIMARY KEY,
+            name_file TEXT,
             course_id TEXT,
             test_form_code TEXT,
             answer_list TEXT, 
@@ -72,7 +73,7 @@ def insert_assignment(data: List[List[str]]):
     conn.commit()
     conn.close()
 
-def insert_answer(course_id:str, test_form_code:str, answer_list:List[List[str]]):
+def insert_answer(name_file: str, course_id:str, test_form_code:str, answer_list:List[List[str]]):
     """
     answer_list: Python list (we'll JSON-serialize)
     """
@@ -83,10 +84,10 @@ def insert_answer(course_id:str, test_form_code:str, answer_list:List[List[str]]
     now = datetime.utcnow().isoformat()
     cursor.execute("""
         INSERT INTO answers (
-            id, course_id, test_form_code, answer_list, create_date, update_date
-        ) VALUES (?, ?, ?, ?, ?, ?)
+            id, name_file, course_id, test_form_code, answer_list, create_date, update_date
+        ) VALUES (?, ?, ?, ?, ?, ?, ?)
     """, (
-        answer_id, course_id, test_form_code, answer_json, now, now
+        answer_id, name_file, course_id, test_form_code, answer_json, now, now
     ))
     conn.commit()
     conn.close()
@@ -145,11 +146,6 @@ def get_all_assignments() -> pd.DataFrame:
     data = []
     for row in rows:
         row = list(row)
-        try:
-            assignment_list = json.loads(row[-1])  # last column
-            row[-1] = str(assignment_list)
-        except:
-            pass
         if len(row) > 10:
             row[8] = format_datetime(row[9])  # create_date
             row[9] = format_datetime(row[10])  # update_date
@@ -158,6 +154,71 @@ def get_all_assignments() -> pd.DataFrame:
     df = pd.DataFrame(data, columns=columns)
     df = convert_list_assignment(df)
     return df
+
+def get_assignments_by_id(answer_id:str) -> pd.DataFrame:
+    conn = sqlite3.connect("mydata.db")
+    cursor = conn.cursor()
+    cursor.execute('''SELECT 
+            answer_list,
+            create_date,
+            update_date FROM answers WHERE id = ?''', (answer_id,))
+    row = cursor.fetchone()
+    if not row:
+        return pd.DataFrame(columns=["question", "answer", "create_date", "update_date"])
+    conn.close()
+    data = []
+    row = list(row)
+    try:
+        answer_list = json.loads(row[0])
+    except:
+        answer_list = []
+    create_date = format_datetime(row[1])
+    update_date = format_datetime(row[2])
+    data = []
+    for answer in answer_list:
+        question = answer[0]
+        answer = answer[1]
+        data.append({
+            "Question": question,
+            "Answer": answer,
+            "Description": "",
+            "Create Date": create_date,
+            "Update Date": update_date
+        })
+    return pd.DataFrame(data)
+
+def get_all_answers() -> pd.DataFrame:
+    conn = sqlite3.connect("mydata.db")
+    cursor = conn.cursor()
+    cursor.execute('''SELECT 
+            id,
+            name_file,
+            course_id,
+            test_form_code,
+            answer_list,
+            create_date,
+            update_date FROM answers''')
+    rows = cursor.fetchall()
+    columns = [desc[0] for desc in cursor.description]  # get column names
+    conn.close()
+    data = []
+    for row in rows:
+        row = list(row)
+        try:
+            answer_list = json.loads(row[4])
+            number_answer = len(answer_list)
+            row[4] = number_answer
+        except:
+            number_answer = 0
+        row[5] = format_datetime(row[5])  # create_date
+        row[6] = format_datetime(row[6])  # update_date
+        data.append(row)
+
+    df = pd.DataFrame(data, columns=columns)
+    df = convert_list_answer(df)
+    return df
+
+
 
 def format_datetime(dt_str: str) -> str:
     """Convert ISO datetime string to 'dd-mm-yyyy HH:MM:SS.sss' format."""
