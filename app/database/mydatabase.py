@@ -5,6 +5,7 @@ from utils import convert_insert_assignment, convert_list_assignment, convert_li
 import uuid
 import pandas as pd
 from datetime import datetime
+from ast import literal_eval
 
 
 def create_connection():
@@ -49,13 +50,25 @@ def insert_assignment(data: List[List[str]]):
     """
     assignment_list: Python list (we'll JSON-serialize)
     """
+    # Get answer key.
+    conn = sqlite3.connect("mydata.db")
+    cursor = conn.cursor()
+    
     last_name, first_name, middle_name, test_form_code, student_id, course_id, source_file, assignment_list = convert_insert_assignment(data)
-    score = ""
-    conn = create_connection()
+    
+    cursor.execute("""SELECT
+        answer_list
+        FROM answers WHERE course_id = ? AND test_form_code = ?
+    """, (course_id, test_form_code))
+    answer_key = literal_eval(cursor.fetchone()[0])
+
+    print(answer_key, type(answer_key))
+    print(assignment_list, type(assignment_list))
+    score = sum(answer_key[i][1] == assignment_list[i][1] for i in range(len(answer_key)))
     assignment_id = str(uuid.uuid4())
     assignment_json = json.dumps(assignment_list, ensure_ascii=False)
-    cursor = conn.cursor()
     now = datetime.utcnow().isoformat()
+    
     cursor.execute("""
         INSERT INTO assignments (
             id, last_name, first_name, middle_name,
@@ -111,7 +124,8 @@ def get_assignments_by_id(assignment_id:str) -> pd.DataFrame:
         assignment_list = []
     create_date = format_datetime(row[1])
     update_date = format_datetime(row[2])
-    data = []
+    # Get data from answer key.
+    
     for assignment in assignment_list:
         question = assignment[0]
         answer = assignment[1]
