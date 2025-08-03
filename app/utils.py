@@ -1,5 +1,6 @@
 from typing import List, Tuple
 import pandas as pd
+from datetime import datetime
 
 def convert_insert_assignment(data: List[List[str]]) -> Tuple[
     str, str, str, str, str, str, str, List[List[str]]
@@ -81,3 +82,11 @@ def process_anskeys(uploaded_file) -> Tuple[str, str, List[List[str]]]:
         raise ValueError("File must contain 'Key' and 'Value' columns.")
 
     return course_id, test_form_code, questions
+
+def format_datetime(dt_str: str) -> str:
+    """Convert ISO datetime string to 'dd-mm-yyyy HH:MM:SS.sss' format."""
+    try:
+        dt = datetime.fromisoformat(dt_str)
+        return dt.strftime("%d-%m-%Y %H:%M:%S.%f")[:-3]
+    except Exception:
+        return dt_str  # fallback if format fails

@@ -1,6 +1,7 @@
 import streamlit as st
 from mcr.process_input import process_input
-from database.mydatabase import *
+from database.answer import *
+from database.assignment import *
 from utils import process_anskeys
 
 def render_upload_answer_section(name_file: str):
@@ -27,7 +28,8 @@ def render_upload_answer_section(name_file: str):
     if uploaded_files:
         for file in uploaded_files:
             course_id, test_form_code, questions = process_anskeys(file)
-            insert_answer(file.name, course_id, test_form_code, questions)
+            user_id = st.session_state["id"]
+            insert_answer(user_id, file.name, course_id, test_form_code, questions)
     st.button("Delete", key="delete")
 
 def render_upload_assignment_section(name_file: str):
@@ -56,5 +58,6 @@ def render_upload_assignment_section(name_file: str):
             for file in uploaded_files:
                 data = process_input(file.read(), file.name)
                 if data is not None:
-                    insert_assignment(data)        
+                    user_id = st.session_state["id"]
+                    insert_assignment(user_id, data)        
     st.button("Delete", key="delete")
