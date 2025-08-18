@@ -63,7 +63,7 @@ def convert_list_answer(df: pd.DataFrame):
     return df
 
 def process_anskeys(uploaded_file) -> Tuple[str, str, List[List[str]]]:
-    df = pd.read_excel(uploaded_file)
+    df = pd.read_excel(uploaded_file, dtype={"Value": str})
     course_id = ""
     test_form_code = ""
     questions = []

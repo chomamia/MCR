@@ -38,7 +38,6 @@ if token is not None:
             assignment_detail.show(id)
     else:
         selected_page = render_sidebar()
-        st.session_state["current_page"] = selected_page
         if selected_page == "Answer":
             answer.show()
         elif selected_page == "Assignment":

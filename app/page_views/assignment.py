@@ -51,4 +51,3 @@ def show():
     user_id = st.session_state["id"]
     df = get_all_assignments(user_id)
     render_table_section_assignment(df)
-    # render_pagination()

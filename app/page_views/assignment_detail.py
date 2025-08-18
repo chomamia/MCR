@@ -50,6 +50,7 @@ def show(id:str):
     if st.button("🔙 Back"):
         st.query_params.clear()
         st.query_params["page"] = "Assignment"
+        st.session_state["current_page"] = "Assignment"
         st.rerun()
     user_id = st.session_state["id"]
     df = get_assignments_by_id(user_id, id)

@@ -27,8 +27,19 @@ def insert_answer(user_id:str, name_file: str, course_id:str, test_form_code:str
     conn.commit()
     conn.close()
 
+def check_answer_exist(user_id:str, course_id:str, test_form_code:str) -> bool:
+    conn = create_connection()
+    cursor = conn.cursor()
+    cursor.execute('''SELECT 
+            * FROM answers WHERE user_id = ? and course_id = ? and test_form_code = ?''', (user_id, course_id, test_form_code,))
+    row = cursor.fetchone()
+    if row is not None:
+        return True
+    else:
+        return False
+
 def get_answer_by_id(answer_id:str, user_id:str) -> pd.DataFrame:
-    conn = sqlite3.connect("mydata.db")
+    conn = create_connection()
     cursor = conn.cursor()
     cursor.execute('''SELECT 
             answer_list,
@@ -60,7 +71,7 @@ def get_answer_by_id(answer_id:str, user_id:str) -> pd.DataFrame:
     return pd.DataFrame(data)
 
 def get_all_answers(user_id:str) -> pd.DataFrame:
-    conn = sqlite3.connect("mydata.db")
+    conn = create_connection()
     cursor = conn.cursor()
     cursor.execute('''SELECT 
             id,
@@ -89,3 +100,23 @@ def get_all_answers(user_id:str) -> pd.DataFrame:
     df = pd.DataFrame(data, columns=columns)
     df = convert_list_answer(df)
     return df
+
+def delete_answers(id_list: list[str]):
+    """
+    Delete answers by list id
+
+    Args:
+        id_list (list[str]): list id.
+    """
+    if not id_list:
+        return
+
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    placeholders = ",".join(["?"] * len(id_list))
+    sql = f"DELETE FROM answers WHERE id IN ({placeholders})"
+
+    cursor.execute(sql, id_list)
+    conn.commit()
+    conn.close()

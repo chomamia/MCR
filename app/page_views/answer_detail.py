@@ -44,6 +44,7 @@ def show(id: str):
     if st.button("🔙 Back"):
         st.query_params.clear()
         st.query_params["page"] = "Answer"
+        st.session_state["current_page"] = "Answer"
         st.rerun()
     user_id = st.session_state["id"]
     df = get_answer_by_id(id, user_id)

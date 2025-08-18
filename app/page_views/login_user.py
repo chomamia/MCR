@@ -17,14 +17,14 @@ def login_page():
     col1, col2 = st.columns([2, 1])
 
     with col1:
-        st.markdown(
-            """
-            <div style='background-color: #f5f5f5; display: flex; justify-content: center; align-items: center; height: 100vh;'>
-                <h1 style='color: #2c3e50;'>LOGO and Name</h1>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
+        # st.markdown(
+        # """
+        # <div style='background-color: #f5f5f5; display: flex; justify-content: center; align-items: center; height: 100vh;'>
+        # """,
+        # unsafe_allow_html=True
+        # )
+        st.image("assets/image.jpg", use_container_width=False)
+        st.markdown("</div>", unsafe_allow_html=True)
 
     with col2:
         if not st.session_state["show_register"]:
@@ -109,7 +109,6 @@ def register_page():
         </style>
     """, unsafe_allow_html=True)
 
-    # Handle logic
     if register_clicked:
         if pw1 != pw2:
             st.error("Passwords do not match")

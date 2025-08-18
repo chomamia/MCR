@@ -63,8 +63,8 @@ class Grid:
 
         self.image = image
 
-        if save_path:
-            image_utils.save_image(save_path / "grid.jpg", self.draw_grid())
+        # if save_path:
+        # image_utils.save_image("C://Users//Admin//Documents//mcr//open-mcr//test//end-to-end//75q-core-1-v1//output//grid.jpg", self.draw_grid())
 
     def _get_cell_shape_in_basis(self, across: int,
                                  down: int) -> geometry_utils.Polygon:
@@ -126,27 +126,13 @@ class Grid:
     def get_masked_cell_matrix(self, across: int, down: int) -> ma.MaskedArray:
         """Get the matrix of pixels in the cell area, masked down to just the cell circle."""
         unmasked = self.get_unmasked_cell_matrix(across, down)
-        # cv2.imwrite(r'C:\Users\Admin\Documents\mcr\open-mcr\test\end-to-end\75q-core-1-v2\output\unmask' + str(down) + ".jpg", unmasked)
         mask = np.ones(unmasked.shape)
         unit_dimension = sum(mask.shape) / 2
         center = (round(mask.shape[0] / 2), round(mask.shape[1] / 2))
         circle_radius = (unit_dimension / 2) * (1 -
                                                 (GRID_CELL_CROP_FRACTION / 2))
         cv2.circle(mask, center, int(circle_radius), (0, 0, 0), -1)
-        # visual_mask = (mask * 255).astype(np.uint8)
-        # cv2.imwrite(r'C:\Users\Admin\Documents\mcr\open-mcr\test\end-to-end\75q-core-1-v2\output\mask_visual_' + str(down) + '.png', visual_mask)
         masked = ma.masked_array(unmasked, mask)
-        # image_data = masked.data
-        # image_mask = masked.mask
-        # masked_image = image_data.copy()
-        # masked_image[image_mask] = 0
-        # if len(masked_image.shape) == 2:
-        #     cv2.imwrite(r'C:\Users\Admin\Documents\mcr\open-mcr\test\end-to-end\75q-core-1-v2\output\masked_image_gray_' + str(down) + '.png', masked_image)
-        # elif len(masked_image.shape) == 3:
-        #     for i in range(3):
-        #         masked_image[:, :, i][image_mask] = 0
-        #     cv2.imwrite(r'C:\Users\Admin\Documents\mcr\open-mcr\test\end-to-end\75q-core-1-v2\output\masked_image_rgb_' + str(down) + '.png', masked_image)
-        # cv2.imwrite(r'C:\Users\Admin\Documents\mcr\open-mcr\test\end-to-end\75q-core-1-v2\output\mask' + str(down) + ".jpg", masked)
         return masked
 
     def draw_grid(self):
