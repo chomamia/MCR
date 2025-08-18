@@ -30,6 +30,8 @@ def insert_assignment(user_id:str, data: List[List[str]]):
     else:
         answer_key = literal_eval(answer_key[0])
         score = sum(answer_key[i][1] == assignment_list[i][1] for i in range(len(answer_key)))
+        rate_score = 10 / len(answer_key)
+        score = score * rate_score
         assignment_id = str(uuid.uuid4())
         assignment_json = json.dumps(assignment_list, ensure_ascii=False)
         now = datetime.utcnow().isoformat()
@@ -67,9 +69,18 @@ def get_assignments_by_id(user_id:str, assignment_id:str) -> pd.DataFrame:
     cursor = conn.cursor()
     cursor.execute('''SELECT 
             assignment_list,
+            test_form_code,
+            course_id,
             create_date,
             update_date FROM assignments WHERE id = ? and user_id = ?''', (assignment_id, user_id, ))
+    
     row = cursor.fetchone()
+    cursor.execute("""SELECT
+        answer_list
+        FROM answers WHERE course_id = ? AND test_form_code = ?
+    """, (row[2], row[1]))
+    answer_row = cursor.fetchone()
+    answer_key = literal_eval(answer_row[0])
     if not row:
         return pd.DataFrame(columns=["question", "answer", "create_date", "update_date"])
     conn.close()
@@ -79,18 +90,26 @@ def get_assignments_by_id(user_id:str, assignment_id:str) -> pd.DataFrame:
         assignment_list = json.loads(row[0])
     except:
         assignment_list = []
-    create_date = format_datetime(row[1])
-    update_date = format_datetime(row[2])
+    create_date = format_datetime(row[3])
+    update_date = format_datetime(row[4])
     data = []
-    for assignment in assignment_list:
+    rate_score = 10 / len(answer_key)
+    for index, assignment in enumerate(assignment_list):
         question = assignment[0]
         answer = assignment[1]
+        correct_answer = answer_key[index][1]
+        if correct_answer == answer:
+            corect = True
+            score = rate_score
+        else:
+            corect = False
+            score = 0
         data.append({
             "Question": question,
             "Answer": answer,
-            "Correct Answer": "",
-            "Corect": "",
-            "Score": "",
+            "Correct Answer": correct_answer,
+            "Corect": corect,
+            "Score": score,
             "Create Date": create_date,
             "Update Date": update_date
         })
@@ -113,13 +132,12 @@ def get_all_assignments(user_id:str ) -> pd.DataFrame:
     rows = cursor.fetchall()
     columns = [desc[0] for desc in cursor.description] 
     conn.close()
-    # convert assignment_list from JSON to readable string (optional)
     data = []
     for row in rows:
         row = list(row)
         if len(row) > 10:
-            row[8] = format_datetime(row[8])  # create_date
-            row[9] = format_datetime(row[9])  # update_date
+            row[8] = format_datetime(row[8])
+            row[9] = format_datetime(row[9])
         data.append(row) 
 
     df = pd.DataFrame(data, columns=columns)
