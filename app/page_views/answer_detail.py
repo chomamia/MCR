@@ -2,6 +2,9 @@ import streamlit as st
 import pandas as pd
 from components.table_section import render_table_section
 from database.answer import get_answer_by_id
+from components.sidebar import render_sidebar
+
+
 def create_answer_detail_data():
     """
     Create a sample DataFrame containing a list of questions and answers.
@@ -39,9 +42,10 @@ def show(id: str):
     Note:
         This function depends on Streamlit's session state and UI components.
     """
+    selected_page  = render_sidebar()
     st.markdown(f"### 📄 Answer > `{id}`")
     st.markdown("---")
-    if st.button("🔙 Back"):
+    if st.button("⬅️ Back"):
         st.query_params.clear()
         st.query_params["page"] = "Answer"
         st.session_state["current_page"] = "Answer"

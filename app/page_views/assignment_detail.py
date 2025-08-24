@@ -45,9 +45,9 @@ def show(id:str):
     Note:
         This function depends on Streamlit UI components and an external helper function `render_table_section`.
     """
-    st.markdown(f"### 📄 Assignment > {id}")
+    st.markdown(f"### 📝 Assignment > {id}")
     st.markdown("---")
-    if st.button("🔙 Back"):
+    if st.button("⬅️ Back"):
         st.query_params.clear()
         st.query_params["page"] = "Assignment"
         st.session_state["current_page"] = "Assignment"

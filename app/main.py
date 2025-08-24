@@ -2,7 +2,7 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), "mcr"))
 import streamlit as st
-from page_views import answer, assignment, answer_detail, assignment_detail, login_user
+from page_views import answer, assignment, answer_detail, assignment_detail, login_user, information, change_password, support
 from components.sidebar import render_sidebar
 from database.create_table import create_table
 from auth.streamlit_javascript import get_token_from_local_storage
@@ -36,9 +36,22 @@ if token is not None:
     elif page_param == "assignment_detail":
         if id is not None:
             assignment_detail.show(id)
+    # elif page_param == "information":
+    #     information.show()
+    # elif page_param == "change_password":
+    #     change_password.show()
+    # elif page_param == "support":
+    #     support.show()
     else:
-        selected_page = render_sidebar()
+        selected_page  = render_sidebar()
         if selected_page == "Answer":
             answer.show()
         elif selected_page == "Assignment":
             assignment.show()
+         # Setting pages
+        if selected_page == "Information":
+            information.show()
+        elif selected_page == "Change Password":
+            change_password.show()
+        elif selected_page == "Support":
+            support.show()

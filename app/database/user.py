@@ -17,6 +17,43 @@ def add_user(email:str, password:str, full_name:str):
     conn.close()
     return True
 
+def update_password(user_id: str, old_password: str, new_password: str) -> bool:
+    """
+    Update user password in the database.
+
+    Args:
+        user_id (str): The ID of the user who wants to change password.
+        old_password (str): The current password entered by the user.
+        new_password (str): The new password to update.
+
+    Returns:
+        bool: True if password updated successfully, False otherwise.
+    """
+    conn = create_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT password FROM users WHERE id = ?", (user_id,))
+    row = cursor.fetchone()
+    if not row:
+        conn.close()
+        return False
+
+    current_hashed_pw = row[0]
+
+    if not bcrypt.verify(old_password, current_hashed_pw):
+        conn.close()
+        return False 
+
+    new_hashed_pw = bcrypt.hash(new_password)
+    try:
+        cursor.execute("UPDATE users SET password = ? WHERE id = ?", (new_hashed_pw, user_id))
+        conn.commit()
+        conn.close()
+        return True
+    except sqlite3.Error:
+        conn.rollback()
+        conn.close()
+        return False
+    
 def verify_user(email:str, password:str):
     conn = create_connection()
     cursor = conn.cursor()
