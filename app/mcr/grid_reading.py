@@ -150,6 +150,17 @@ class Grid:
                 cv2.circle(image, (int(round(center.x)), int(round(center.y))),
                            int(round(radius)), (255, 0, 0), 1)
         return image
+    
+    def get_cell_index_from_bbox(self, bbox: tuple[int, int, int, int]) -> tuple[int, int] | None:
+        x_min, y_min, x_max, y_max = bbox
+        center = geometry_utils.Point((x_min + x_max) / 2, (y_min + y_max) / 2)
+        point_in_basis = self.basis_transformer.to_basis(center)
+        across = int(point_in_basis.x / self.horizontal_cell_size)
+        down   = int(point_in_basis.y / self.vertical_cell_size)
+        if 0 <= across < self.horizontal_cells and 0 <= down < self.vertical_cells:
+            return across, down
+        else:
+            return None
 
 
 class _GridField(abc.ABC):
@@ -395,3 +406,4 @@ def calculate_bubble_fill_threshold(
         with open(str(save_path / "threshold_values.txt"), "w+") as file:
             file.writelines([str(sorted_and_flattened), "\n\n", str(result)])
     return result
+

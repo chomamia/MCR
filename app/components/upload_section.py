@@ -1,5 +1,6 @@
 import streamlit as st
 from mcr.process_input import process_input
+from mcr.yolo_detect import yolo_process_input
 from database.answer import *
 from database.assignment import *
 from utils import process_anskeys
@@ -59,6 +60,11 @@ def render_upload_assignment_section(name_file: str):
         and `st.button` for rendering the UI.
     """
     st.markdown("#### Upload or Drop {} file".format(name_file))
+    method = st.radio(
+        "Choose detection method:",
+        ["Detect by YOLO", "Image Processing"],
+        horizontal=True
+    )
     if "upload_assignment_key" not in st.session_state:
         st.session_state.upload_assignment_key = 0
     uploaded_files = st.file_uploader(
@@ -68,7 +74,10 @@ def render_upload_assignment_section(name_file: str):
         user_id = st.session_state["id"]
         with st.spinner("Processing image..."):
             for file in uploaded_files:
-                data = process_input(file.read(), file.name)
+                if method == "Detect by YOLO":
+                    data = yolo_process_input(file.read(), file.name)
+                else:
+                    data = process_input(file.read(), file.name)
                 last_name, first_name, middle_name, test_form_code, student_id, course_id, source_file, assignment_list = convert_insert_assignment(data)
                 if test_form_code == "" or student_id =="" or course_id == "":
                     st.error(f"Personal information such as Test Form Code, Student ID, course ID, are required")
