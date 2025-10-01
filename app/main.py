@@ -36,12 +36,6 @@ if token is not None:
     elif page_param == "assignment_detail":
         if id is not None:
             assignment_detail.show(id)
-    # elif page_param == "information":
-    #     information.show()
-    # elif page_param == "change_password":
-    #     change_password.show()
-    # elif page_param == "support":
-    #     support.show()
     else:
         selected_page  = render_sidebar()
         if selected_page == "Answer":

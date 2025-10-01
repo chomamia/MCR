@@ -1,5 +1,6 @@
 import streamlit as st
 from database.user import update_password
+from utils import get_localized_string
 def show():
     """
     Display the "Change Password" page.
@@ -9,26 +10,27 @@ def show():
         - Validates that new password and confirmation match.
         - Shows a success or error message.
     """
-    st.markdown("### 🔒 Change Password")
+    lang = st.session_state.get("lang", "en")
+    st.markdown(f"### 🔒 {get_localized_string('change_password', lang)}")
     st.markdown("---")
 
     # Password input fields
-    old_password = st.text_input("Old Password", type="password")
-    new_password = st.text_input("New Password", type="password")
-    confirm_password = st.text_input("Confirm New Password", type="password")
+    old_password = st.text_input(get_localized_string("old_password", lang), type="password")
+    new_password = st.text_input(get_localized_string("new_password", lang), type="password")
+    confirm_password = st.text_input(get_localized_string("confirm_new_password", lang), type="password")
 
-    if st.button("Update Password"):
+    if st.button(get_localized_string("update_password", lang)):
         if not old_password or not new_password or not confirm_password:
-            st.error("⚠️ Please fill in all fields.")
+            st.error(get_localized_string("fill_all_fields", lang))
         elif new_password != confirm_password:
-            st.error("❌ New password and confirmation do not match.")
+            st.error(get_localized_string("password_not_match", lang))
         elif new_password == old_password:
-            st.error("⚠️ New password cannot be the same as old password.")
+            st.error(get_localized_string("password_same_as_old", lang))
         else:
             user_id = st.session_state.get("id")
             if update_password(user_id, old_password, new_password):
-                st.success("✅ Password updated successfully!")
+                st.success(get_localized_string("password_updated_success", lang))
                 from auth.streamlit_javascript import delete_jwt
                 delete_jwt()
             else:
-                st.error("❌ Failed to update password. Please check your old password.")
+                st.error(get_localized_string("password_update_failed", lang))

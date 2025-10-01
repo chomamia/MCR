@@ -10,7 +10,7 @@ def render_table_section(df: pd.DataFrame):
     st.dataframe(df, use_container_width=True, height=800)
     return selected_rows
 
-def render_table_section_answer(df:  pd.DataFrame):
+def render_table_section_answer(df: pd.DataFrame):
     if "delete_mode" not in st.session_state:
         st.session_state.delete_mode = False
     

@@ -3,6 +3,7 @@ import pandas as pd
 from components.upload_section import render_upload_assignment_section
 from components.table_section import render_table_section_assignment
 from database.assignment import get_all_assignments
+from utils import get_localized_string
 def create_assignment_data():
     """
     Create a sample DataFrame containing assignment records.
@@ -44,10 +45,10 @@ def show():
         This function depends on Streamlit UI components and external helper functions 
         `render_upload_section` and `render_table_section_assignment`.
     """
-    st.markdown("### 📄 Assignment Management")
+    lang = st.session_state.get("lang", "en")
+    st.markdown(f"### 📄 {get_localized_string('assignment_management', lang)}")
     st.markdown("---")
-
-    render_upload_assignment_section("Assignment")
+    render_upload_assignment_section(get_localized_string("assignment", lang))
     user_id = st.session_state["id"]
     df = get_all_assignments(user_id)
     render_table_section_assignment(df)

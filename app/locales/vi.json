@@ -1,0 +1,31 @@
+{
+  "title": "Nhận diện trắc nghiệm",
+  "welcome": "Chào mừng bạn đến với ứng dụng!",
+  "select_language": "Chọn ngôn ngữ",
+  "english": "Tiếng Anh",
+  "vietnamese": "Tiếng Việt",
+  "submit": "Gửi",
+  "logout": "Đăng xuất"
+  ,"answer": "Câu trả lời"
+  ,"assignment": "Đáp án",
+    "information": "Thông tin",
+    "answer_management": "Quản lý câu trả lời",
+    "assignment_management": "Quản lý đáp án",
+    "application_info": "Thông tin ứng dụng",
+    "application_info_desc": "Multiple Choice Reader là ứng dụng quản lý và chấm bài thi trắc nghiệm.\nTính năng chính:\n- Quản lý câu trả lời và bài giao.\n- Tải lên file và hiển thị dữ liệu có cấu trúc.\n- Tự động chấm điểm bài giao bằng AI.\n- Xác thực bảo mật bằng JWT.\n- Giao diện đơn giản, dễ sử dụng.\nHướng dẫn sử dụng:\n- Bước 0: Tải xuống dữ liệu thử nghiệm mẫu tại: https://drive.google.com/drive/u/0/folders/1alfrgJfDU5pPmyfQebIzMv7G0tcARu8k \n- Bước 1: Đăng nhập bằng tài khoản đã đăng ký (Nếu chưa có tài khoản, hãy tạo mới)\n- Bước 2: Sau khi đăng nhập thành công, màn hình mặc định là quản lý câu trả lời. Tại đây, người dùng có thể tải lên file câu trả lời, xem lại các file đã thêm ở bảng bên dưới, nhấn để xem chi tiết.\n- Bước 3: Sau khi tải lên file câu trả lời, người dùng chuyển sang màn hình bài giao để tải lên file tương ứng để AI tự động trích xuất và chấm điểm.\n- Bước 4: Xem kết quả ở bảng bên dưới, nhấn để xem chi tiết.\n- Bước 5: Sau khi có kết quả, người dùng có thể xuất ra file excel bằng cách nhấn nút xuất file.",
+    "old_password": "Mật khẩu cũ",
+    "new_password": "Mật khẩu mới",
+    "confirm_new_password": "Xác nhận mật khẩu mới",
+    "update_password": "Cập nhật mật khẩu",
+    "fill_all_fields": "⚠️ Vui lòng điền đầy đủ thông tin.",
+    "password_not_match": "❌ Mật khẩu mới và xác nhận không khớp.",
+    "password_same_as_old": "⚠️ Mật khẩu mới không được trùng với mật khẩu cũ.",
+    "password_updated_success": "✅ Đổi mật khẩu thành công!",
+    "password_update_failed": "❌ Đổi mật khẩu thất bại. Vui lòng kiểm tra lại mật khẩu cũ.",
+    "user_information": "Thông tin người dùng",
+    "contact_author": "Mọi thắc mắc vui lòng liên hệ tác giả:",
+    "author_name": "Tên tác giả:",
+    "author_email": "Email tác giả:"
+  ,"change_password": "Đổi mật khẩu"
+  ,"support": "Hỗ trợ"
+}

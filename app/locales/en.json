@@ -1,0 +1,31 @@
+{
+  "title": "Multiple Choice Recognition",
+  "welcome": "Welcome to the app!",
+  "select_language": "Select language",
+  "english": "English",
+  "vietnamese": "Vietnamese",
+  "submit": "Submit",
+  "logout": "Logout"
+  ,"answer": "Answer"
+  ,"assignment": "Assignment"
+  ,"information": "Information"
+  ,"change_password": "Change Password"
+  ,"support": "Support",
+    "answer_management": "Answer Management",
+    "assignment_management": "Assignment Management",
+    "application_info": "Application Info",
+    "application_info_desc": "Multiple Choice Reader is an application designed to manage and evaluate multiple-choice exam papers.\nKey Features:\n- Manage answers and assignments.\n- Upload files and display structured data.\n- Automation calculate assignment scores using AI technology\n- Secure authentication with JWT tokens.\n- Simple and intuitive user interface.\nUser manual application:\n Step 0: Download sample test data at: https://drive.google.com/drive/u/0/folders/1alfrgJfDU5pPmyfQebIzMv7G0tcARu8k \n- Step 1: Users can log in with the registered user account at login (If you do not have an account, please create a new account)\n- Step 2: After the user logs in successfully. The default screen is the Answer management screen. Here, the user can upload the desired Answer file. In addition, the old answer files that have been added can be viewed in the table below, click to see details.\n- Step 3: After the user successfully uploads the answer file. The user needs to click on the Assignment screen to upload the corresponding files so that the AI program can automatically extract and score.\n- Step 4: The user can view the results in the table below and can click to see details.\n- Step 5: After the results are available, the user can export to an excel file by clicking the export button.",
+    "old_password": "Old Password",
+    "new_password": "New Password",
+    "confirm_new_password": "Confirm New Password",
+    "update_password": "Update Password",
+    "fill_all_fields": "⚠️ Please fill in all fields.",
+    "password_not_match": "❌ New password and confirmation do not match.",
+    "password_same_as_old": "⚠️ New password cannot be the same as old password.",
+    "password_updated_success": "✅ Password updated successfully!",
+    "password_update_failed": "❌ Failed to update password. Please check your old password.",
+    "user_information": "User Information",
+    "contact_author": "For any questions please contact the author:",
+    "author_name": "Author Name:",
+    "author_email": "Author Email:"
+}

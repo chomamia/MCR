@@ -1,4 +1,6 @@
 from typing import List, Tuple
+import json
+import os
 import pandas as pd
 from datetime import datetime
 
@@ -90,3 +92,14 @@ def format_datetime(dt_str: str) -> str:
         return dt.strftime("%d-%m-%Y %H:%M:%S.%f")[:-3]
     except Exception:
         return dt_str  # fallback if format fails
+
+
+def get_localized_string(key: str, lang: str = "en") -> str:
+    locales_dir = os.path.join(os.path.dirname(__file__), "locales")
+    file_path = os.path.join(locales_dir, f"{lang}.json")
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        return data.get(key, key)
+    except Exception:
+        return key
